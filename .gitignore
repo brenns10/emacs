@@ -1,0 +1,4 @@
+syntax: glob
+*.el
+elpa
+emacs-backup
