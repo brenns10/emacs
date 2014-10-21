@@ -1,0 +1,14 @@
+* Implementation
+** Required Packages
+#+name: requirements
+#+begin_src emacs-lisp
+(stemacs-require '(yasnippet))
+(require 'yasnippet)
+#+end_src
+** Settings
+
+#+name: init
+#+begin_src emacs-lisp
+(add-to-list 'yas-snippet-dirs "~/.snippets")
+(yas-global-mode 1)
+#+end_src

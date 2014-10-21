@@ -1,0 +1,14 @@
+* Implementation
+** Required Packages
+#+name: requirements
+#+begin_src emacs-lisp
+(stemacs-require '(elpy))
+#+end_src
+** Settings
+
+#+name: init
+#+begin_src emacs-lisp
+(elpy-enable)
+(setq elpy-rpc-backend "jedi")
+(elpy-use-ipython)
+#+end_src

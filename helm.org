@@ -1,0 +1,78 @@
+* Implementation
+** Required Packages
+#+name: requirements
+#+begin_src emacs-lisp
+(stemacs-require '(helm helm-dash))
+(require 'helm-config)
+#+end_src
+** Settings
+
+#+name: init
+#+begin_src emacs-lisp
+(require 'helm-config)
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(eval-after-load 'helm
+  '(progn
+     ; rebind tab to do persistent action
+     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+     ; make TAB works in terminal
+     (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+     ; list actions using C-z
+     (define-key helm-map (kbd "C-z")  'helm-select-action)
+     ))
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq
+ ; do not display invisible candidates
+ helm-quick-update                     t
+ ; open helm buffer inside current window, not occupy whole other window
+ helm-split-window-in-side-p           t
+ ; fuzzy matching buffer names when non--nil
+ helm-buffers-fuzzy-matching           t
+ ; move to end or beginning of source when reaching top or bottom of source.
+ helm-move-to-line-cycle-in-source     t
+ ; search for library in `require' and `declare-function' sexp.
+ helm-ff-search-library-in-sexp        t
+ ; scroll 8 lines other window using M-<next>/M-<prior>
+ helm-scroll-amount                    8
+ helm-ff-file-name-history-use-recentf t)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+(helm-mode 1)
+
+(setq helm-dash-browser-func 'eww)
+(global-set-key (kbd "C-c h d") 'helm-dash)
+#+end_src
+
+** Hooks
+
+The various modes I use need hooks.  This code adds hooks that set the docsets
+for each programming language I use.
+
+#+name: init
+#+begin_src emacs-lisp
+(add-hook 'c-mode-hook
+          (lambda ()
+            (setq-local helm-dash-docsets '("C"))))
+(add-hook 'cpp-mode-hook
+          (lambda ()
+            (setq-local helm-dash-docsets '("C++"))))
+(add-hook 'python-mode-hook
+          (lambda ()
+            (setq-local helm-dash-docsets '("Python 3" "Django" "Flask" "NumPy"
+                                            "SciPy"))))
+(add-hook 'java-mode-hook
+          (lambda
+            (setq-local helm-dash-docsets '("Java SE7"))))
+#+end_src

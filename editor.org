@@ -1,0 +1,95 @@
+* Implementation
+** Required Packages
+#+name: requirements
+#+begin_src emacs-lisp
+(stemacs-require '(solarized-theme dired+ tabbar))
+(require 'whitespace)
+#+end_src
+** Settings
+
+I would like to have 80 character columns instead of the ridiculously cramped
+default of 70.
+
+#+name: init
+#+begin_src emacs-lisp
+;; Parapraph Reflowing
+(setq-default fill-column 80)
+#+end_src
+
+I love the solarized dark theme, so that will be my theme.
+
+#+name: init
+#+begin_src emacs-lisp
+;; Solarized Theme
+(load-theme 'solarized-dark t)
+#+end_src
+
+Some of my whitespace preferences such as tab use, tab width, trailing
+whitespace, and overflowing lines.
+
+#+name: init
+#+begin_src emacs-lisp
+;; ONLY use spaces to indent things.  I like using spaces, but more importantly
+;; is that I use consistency.  I think that emaacs shouldn't define TAB=8 spaces
+;; and then when I indent by 10 spaces, do a tab and 2 spaces.  Use tabs or use
+;; spaces, but use them consistently.
+(setq-default indent-tabs-mode nil)
+;; Display tabs as 4 spaces
+(setq tab-width 4)
+
+;; Whitespace mode -- highlight trailing whitespace, tabs, and parts of lines
+;; longer than 80 characters.
+(setq whitespace-style '(face trailing tabs lines-tail))
+(global-whitespace-mode t)
+#+end_src
+
+Enable line numbering in each buffer.
+
+#+name: init
+#+begin_src emacs-lisp
+;; Line numbering on every buffer!!
+(global-linum-mode t)
+#+end_src
+
+Highlighting parenthesis and brackets that match.
+
+#+name: init
+#+begin_src emacs-lisp
+;; Highlight matching parenthesis
+(show-paren-mode 1) ; turn on the match highlighting
+(setq show-paren-style 'parenthesis) ; highlight the whole bracketed expression
+#+end_src
+
+Backup options.
+
+#+name: init
+#+begin_src emacs-lisp
+;; Make backups in central dir, not the same one as the original.
+(setq backup-directory-alist `(("." . "~/.emacs.d/emacs-backup")))
+#+end_src
+
+Highlighting the current line
+
+#+name: init
+#+begin_src emacs-lisp
+;; Always highlight the current line
+(global-hl-line-mode 1)
+#+end_src
+
+Tabbar
+
+#+name: init
+#+begin_src emacs-lisp
+;; Show a buffer tab bar!  Requires tabbar package.
+;;(tabbar-mode)
+#+end_src
+
+Remove unnecessary UI elements.
+
+#+name: init
+#+begin_src emacs-lisp
+;; I don't want a toolbar or scrollbars.  The menu bar can stay for now.
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+#+end_src
