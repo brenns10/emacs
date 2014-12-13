@@ -1,10 +1,16 @@
+* Introduction
+
+This file contains all my basic editor preferences.
+
 * Implementation
 ** Required Packages
+
 #+name: requirements
 #+begin_src emacs-lisp
 (stemacs-require '(solarized-theme dired+ tabbar))
 (require 'whitespace)
 #+end_src
+
 ** Settings
 
 I would like to have 80 character columns instead of the ridiculously cramped
