@@ -6,83 +6,88 @@ code to load this file.
 
 I'm trying to make my Emacs configuration modular.  The idea is that each module
 will have a list of required packages, along with configuration code.  The
-modules will install their packages if not already there, and then run their code.
+modules will install their packages if not already there, and then run their
+code.
 
 * Implementation
 ** Package Installation
 
-This code initializes the package archives on startup, and defines a function to
-install a list of packages.  The function should be used by each of the modules
-to require a package.
+This code initializes the package archives on startup.
 
-#+name: package-installation
-#+begin_src emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (package-initialize)
+#+begin_src emacs-lisp :tangle yes
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
 
-  ; fetch the list of packages available
-  (or (file-exists-p package-user-dir)
+; fetch the list of packages available
+(or (file-exists-p package-user-dir)
     (package-refresh-contents))
+#+end_src
 
-  (defun stemacs-require (package-list)
-    (dolist (package package-list)
-      (unless (package-installed-p package)
-        (package-install package))))
+A function that will allow modules to require a package, and install it if it
+isn't installed.
+
+#+begin_src emacs-lisp :tangle yes
+(defun stemacs-require (package-list)
+  (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package))))
+#+end_src
+
+A shortcut for the code below to load files.
+
+#+begin_src emacs-lisp :tangle yes
+(defun stemacs-load (filename)
+  (org-babel-load-file (expand-file-name filename stemacs-dir)))
 #+end_src
 
 ** Modules
 
-The editor module stores my basic editor settings, that don't pertain to a
+The editor module stores my basic editor preferences, that don't pertain to a
 particular mode or anything else.
 
-#+name: init
-#+begin_src emacs-lisp
-(org-babel-load-file (expand-file-name "editor.org" stemacs-dir))
+#+begin_src emacs-lisp :tangle yes
+(stemacs-load "editor.org")
 #+end_src
 
 Yasnippet
 
-#+name: init
-#+begin_src emacs-lisp
-(org-babel-load-file (expand-file-name "yas.org" stemacs-dir))
+#+begin_src emacs-lisp :tangle yes
+(stemacs-load "yas.org")
 #+end_src
 
 Helm
 
-#+name: init
-#+begin_src emacs-lisp
-(org-babel-load-file (expand-file-name "helm.org" stemacs-dir))
+#+begin_src emacs-lisp :tangle yes
+(stemacs-load "helm.org")
 #+end_src
 
 Autocomplete
 
-#+name: init
-#+begin_src emacs-lisp
-(org-babel-load-file (expand-file-name "autocomplete.org" stemacs-dir))
+#+begin_src emacs-lisp :tangle yes
+(stemacs-load "autocomplete.org")
 #+end_src
 
 Python
 
-#+name: init
-#+begin_src emacs-lisp
-(org-babel-load-file (expand-file-name "python.org" stemacs-dir))
+#+begin_src emacs-lisp :tangle yes
+(stemacs-load "python.org")
 #+end_src
 
 LaTeX
 
 #+begin_src emacs-lisp :tangle yes
-(org-babel-load-file (expand-file-name "latex.org" stemacs-dir))
+(stemacs-load "latex.org")
 #+end_src
 
 Markdown
 
 #+begin_src emacs-lisp :tangle yes
-(org-babel-load-file (expand-file-name "markdown.org" stemacs-dir))
+(stemacs-load "markdown.org")
 #+end_src
 
-KMail temp files.  The proper line length is 78 characters.
+KMail email settings
 
 #+begin_src emacs-lisp :tangle yes
-(org-babel-load-file (expand-file-name "kmail.org" stemacs-dir))
+(stemacs-load "kmail.org")
 #+end_src
