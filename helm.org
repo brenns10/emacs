@@ -1,3 +1,6 @@
+* Introduction
+Helm is a pretty neat package that adds more effective navigation commands to
+Emacs.  This requires it and sets keyboard shortcuts and other stuff.
 * Implementation
 ** Required Packages
 #+name: requirements
