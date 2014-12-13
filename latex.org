@@ -1,0 +1,20 @@
+* Introduction
+
+Gotta use that LaTeX yo.
+
+* Implementation
+** Required Packages
+We want AucTex.  But, I have it installed through my package manager, not
+through emacs.
+
+#+begin_src emacs-lisp :tangle yes
+;; (stemacs-require '(auctex))
+#+end_src
+
+** Settings
+
+First, we need to load up auctex.
+#+begin_src emacs-lisp :tangle yes
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+#+end_src

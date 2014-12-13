@@ -68,3 +68,21 @@ Python
 #+begin_src emacs-lisp
 (org-babel-load-file (expand-file-name "python.org" stemacs-dir))
 #+end_src
+
+LaTeX
+
+#+begin_src emacs-lisp :tangle yes
+(org-babel-load-file (expand-file-name "latex.org" stemacs-dir))
+#+end_src
+
+Markdown
+
+#+begin_src emacs-lisp :tangle yes
+(org-babel-load-file (expand-file-name "markdown.org" stemacs-dir))
+#+end_src
+
+KMail temp files.  The proper line length is 78 characters.
+
+#+begin_src emacs-lisp :tangle yes
+(org-babel-load-file (expand-file-name "kmail.org" stemacs-dir))
+#+end_src

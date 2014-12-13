@@ -1,0 +1,24 @@
+* Introduction
+
+This configuration file contains the instructions to make KMail work better
+with Emacs.  It sets the line width to 78 so that KMail won't hard-wrap my
+email.
+
+* Implementation
+** Package Installation
+
+No packages to install.
+
+** Modules
+
+Add a hook to fundamental-mode so that if a buffer is opened with name that
+starts with "kmail", the line-width is set to 78.
+
+#+name: init
+#+begin_src emacs-lisp
+(add-hook 'mail-mode-hook
+          (lambda ()
+            (setq-local fill-column 78)
+            (delete-trailing-whitespace)
+            (message "Get ready to compose!")))
+#+end_src

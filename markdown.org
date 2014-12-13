@@ -1,0 +1,11 @@
+* Introduction
+
+Gotta use that Markdown yo.
+
+* Implementation
+** Required Packages
+Need markdown-mode.
+
+#+begin_src emacs-lisp :tangle yes
+(stemacs-require '(markdown-mode))
+#+end_src
