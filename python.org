@@ -1,3 +1,5 @@
+* Introduction
+Elpy is an Emacs/Python integration package.
 * Implementation
 ** Required Packages
 #+name: requirements
