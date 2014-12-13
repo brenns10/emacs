@@ -1,3 +1,5 @@
+* Introduction
+Install yasnippet, and load snippet directory.
 * Implementation
 ** Required Packages
 #+name: requirements
