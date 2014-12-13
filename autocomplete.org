@@ -1,3 +1,6 @@
+* Introduction
+I was using the auto-complete-mode, but Company Mode is better for Python.  I'll
+have to get stuff working with Company Mode in C/C++.
 * Implementation
 ** Required Packages
 #+name: requirements
