@@ -91,3 +91,9 @@ KMail email settings
 #+begin_src emacs-lisp :tangle yes
 (stemacs-load "kmail.org")
 #+end_src
+
+Gnus email
+
+#+begin_src emacs-lisp :tangle yes
+(stemacs-load "gnus.org")
+#+end_src
