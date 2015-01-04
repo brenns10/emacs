@@ -16,7 +16,7 @@ starts with "kmail", the line-width is set to 78.
 
 #+name: init
 #+begin_src emacs-lisp
-(add-hook 'mail-mode-hook
+(add-hook 'message-mode-hook
           (lambda ()
             (setq-local fill-column 78)
             (delete-trailing-whitespace)

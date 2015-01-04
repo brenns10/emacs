@@ -8,6 +8,11 @@ accounts, and send as them too, I only need to have this one account set up.
 ** Package Installation
 
 You do need gnus.  However, I'm pretty sure that it comes preinstalled on Emacs.
+Also, BBDB, which is not installed by default.
+
+#+begin_src emacs-lisp :tangle yes
+(stemacs-require '(bbdb))
+#+end_src
 
 ** Configuration
 
@@ -74,4 +79,22 @@ look much more like an email list.
        "%1{%B%}"
        "%s\n"))
 (setq gnus-summary-display-arrow t)
+#+end_src
+
+For contacts, I'm using BBDB.  This seems to work for me.  I downloaded my
+Google Contacts in VCF, and used bbdb-vcard to import them.
+
+#+begin_src emacs-lisp :tangle yes
+;;; bbdb
+(require 'bbdb)
+(bbdb-initialize 'gnus 'message)
+(setq
+ bbdb-file "~/.bbdb"
+ bbdb-offer-save 'auto
+ bbdb-notice-auto-save-file t
+ bbdb-expand-mail-aliases t
+ bbdb-canonicalize-redundant-nets-p t
+ bbdb-always-add-addresses t
+ bbdb-complete-name-allow-cycling t
+ )
 #+end_src
