@@ -81,6 +81,32 @@ look much more like an email list.
 (setq gnus-summary-display-arrow t)
 #+end_src
 
+This sets Gnus to display all email messages when I select a group, not just the
+read ones.
+
+#+begin_src emacs-lisp :tangle yes
+(setq gnus-parameters
+  '((".*"
+     (display . all)
+     (gnus-use-scoring nil))))
+#+end_src
+
+This has Gnus display the newest emails first.
+
+#+begin_src emacs-lisp :tangle yes
+(setq gnus-thread-sort-functions
+  '(gnus-thread-sort-by-most-recent-number))
+#+end_src
+
+This tells Gnus to ask me whether to verify signatures.
+
+#+begin_src emacs-lisp :tangle yes
+(setq mm-verify-option 'always)
+(setq mm-decrypt-option 'always)
+(setq mm-encrypt-option 'guided)
+(setq gnus-buttonized-mime-types '("multipart/signed"))
+#+end_src
+
 For contacts, I'm using BBDB.  This seems to work for me.  I downloaded my
 Google Contacts in VCF, and used bbdb-vcard to import them.
 
@@ -97,4 +123,49 @@ Google Contacts in VCF, and used bbdb-vcard to import them.
  bbdb-always-add-addresses t
  bbdb-complete-name-allow-cycling t
  )
+#+end_src
+
+This is a fix for PGP encryption.  From Arch forums (not by me).
+
+#+begin_src emacs-lisp :tangle yes
+(defun epg--list-keys-1 (context name mode)
+  (let ((args (append (if (epg-context-home-directory context)
+			  (list "--homedir"
+				(epg-context-home-directory context)))
+		      '("--with-colons" "--no-greeting" "--batch"
+			"--with-fingerprint" "--with-fingerprint")
+		      (unless (eq (epg-context-protocol context) 'CMS)
+			'("--fixed-list-mode"))))
+	(list-keys-option (if (memq mode '(t secret))
+			      "--list-secret-keys"
+			    (if (memq mode '(nil public))
+				"--list-keys"
+			      "--list-sigs")))
+	(coding-system-for-read 'binary)
+	keys string field index)
+    (if name
+	(progn
+	  (unless (listp name)
+	    (setq name (list name)))
+	  (while name
+	    (setq args (append args (list list-keys-option (car name)))
+		  name (cdr name))))
+      (setq args (append args (list list-keys-option))))
+    (with-temp-buffer
+      (apply #'call-process
+	     (epg-context-program context)
+	     nil (list t nil) nil args)
+      (goto-char (point-min))
+      (while (re-search-forward "^[a-z][a-z][a-z]:.*" nil t)
+	(setq keys (cons (make-vector 15 nil) keys)
+	      string (match-string 0)
+	      index 0
+	      field 0)
+	(while (and (< field (length (car keys)))
+		    (eq index
+			(string-match "\\([^:]+\\)?:" string index)))
+	  (setq index (match-end 0))
+	  (aset (car keys) field (match-string 1 string))
+	  (setq field (1+ field))))
+      (nreverse keys))))
 #+end_src
