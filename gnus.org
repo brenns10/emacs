@@ -54,6 +54,8 @@ mail from different addresses).
       user-mail-address "brenns10@gmail.com")
 #+end_src
 
+** Customization
+
 This code is cut and pasted from [[https://eschulte.github.io/emacs24-starter-kit/starter-kit-gnus.html][Starter Kit Gnus]].  It makes the summary view
 look much more like an email list.
 
@@ -81,8 +83,7 @@ look much more like an email list.
 (setq gnus-summary-display-arrow t)
 #+end_src
 
-This sets Gnus to display all email messages when I select a group, not just the
-read ones.
+This sets Gnus to display all messages in any group.
 
 #+begin_src emacs-lisp :tangle yes
 (setq gnus-parameters
@@ -98,7 +99,7 @@ This has Gnus display the newest emails first.
   '(gnus-thread-sort-by-most-recent-number))
 #+end_src
 
-This tells Gnus to ask me whether to verify signatures.
+These commands give me easier access to PGP encryption services.
 
 #+begin_src emacs-lisp :tangle yes
 (setq mm-verify-option 'always)
@@ -107,13 +108,13 @@ This tells Gnus to ask me whether to verify signatures.
 (setq gnus-buttonized-mime-types '("multipart/signed"))
 #+end_src
 
-Here I tell Gnus to always use the Topic mode instead of the Group mode.
+Use the topic view in Group mode.
 
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 #+end_src
 
-This will automatically quit gnus non-interactively when Emacs exits, so I don't
+This will automatically quit Gnus non-interactively when Emacs exits, so I don't
 need to worry about correctly exiting it myself.
 
 #+begin_src emacs-lisp :tangle yes
@@ -127,7 +128,12 @@ Don't let Gnus take the entire window **every time I open something**.
 (setq gnus-use-full-window nil)
 #+end_src
 
-Keys that make navigating Gnus a hell of a lot easier:
+Some keys and mouse gestures that make mail navigation easier:
+- Use "n" and "p" for navigation, without control button.
+- Create a shortcut "v x" that will close the open article buffer.
+- Use middle click on article buffer to close it.  Since there is already
+  functionality to middle click on message and view it (in Summary view), this
+  makes mouse navigation nice using middle click.
 
 #+begin_src emacs-lisp :tangle yes
 (defun stemacs-switch-close ()
@@ -174,10 +180,12 @@ Google Contacts in VCF, and used bbdb-vcard to import them.
  )
 #+end_src
 
-This is a fix for PGP encryption.  From Arch forums (not by me).
+This is a fix for PGP encryption.  From [[https://bbs.archlinux.org/viewtopic.php?id=190497][Arch BBS]].  This should be fixed with
+newer releases of Emacs (released after December of 2014).
 
 #+begin_src emacs-lisp :tangle yes
-(defun epg--list-keys-1 (context name mode)
+(eval-after-load "epa"
+'(defun epg--list-keys-1 (context name mode)
   (let ((args (append (if (epg-context-home-directory context)
 			  (list "--homedir"
 				(epg-context-home-directory context)))
@@ -216,5 +224,5 @@ This is a fix for PGP encryption.  From Arch forums (not by me).
 	  (setq index (match-end 0))
 	  (aset (car keys) field (match-string 1 string))
 	  (setq field (1+ field))))
-      (nreverse keys))))
+      (nreverse keys)))))
 #+end_src
