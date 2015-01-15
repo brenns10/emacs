@@ -107,6 +107,55 @@ This tells Gnus to ask me whether to verify signatures.
 (setq gnus-buttonized-mime-types '("multipart/signed"))
 #+end_src
 
+Here I tell Gnus to always use the Topic mode instead of the Group mode.
+
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+#+end_src
+
+This will automatically quit gnus non-interactively when Emacs exits, so I don't
+need to worry about correctly exiting it myself.
+
+#+begin_src emacs-lisp :tangle yes
+(setq gnus-interactive-exit nil)
+(add-hook 'kill-emacs-hook 'gnus-group-exit)
+#+end_src
+
+Don't let Gnus take the entire window **every time I open something**.
+
+#+begin_src emacs-lisp :tangle yes
+(setq gnus-use-full-window nil)
+#+end_src
+
+Keys that make navigating Gnus a hell of a lot easier:
+
+#+begin_src emacs-lisp :tangle yes
+(defun stemacs-switch-close ()
+  "Switch window and close it."
+  (interactive)
+  (progn
+    (other-window 1)
+    (delete-window)))
+
+(defun stemacs-mouse-close (event)
+  "Switch to the clicked window and close it."
+  (interactive "e")
+  (let ((w (posn-window (event-start event))))
+    (if (window-valid-p w)
+      (delete-window (select-window w))
+      nil)))
+
+(add-hook 'gnus-summary-mode-hook
+  (lambda ()
+    (progn
+      (define-key gnus-summary-mode-map (kbd "v x") 'stemacs-switch-close)
+      (define-key gnus-summary-mode-map (kbd "n") 'next-line)
+      (define-key gnus-summary-mode-map (kbd "p") 'previous-line))))
+(add-hook 'gnus-article-mode-hook
+  (lambda ()
+    (define-key gnus-article-mode-map [down-mouse-2] 'stemacs-mouse-close)))
+#+end_src
+
 For contacts, I'm using BBDB.  This seems to work for me.  I downloaded my
 Google Contacts in VCF, and used bbdb-vcard to import them.
 
