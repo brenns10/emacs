@@ -83,13 +83,15 @@ look much more like an email list.
 (setq gnus-summary-display-arrow t)
 #+end_src
 
-This sets Gnus to display all messages in any group.
+This sets Gnus to display all messages in any group, and make the Inbox always
+visible.
 
 #+begin_src emacs-lisp :tangle yes
 (setq gnus-parameters
   '((".*"
      (display . all)
      (gnus-use-scoring nil))))
+(setq gnus-permanently-visible-groups "INBOX")
 #+end_src
 
 This has Gnus display the newest emails first.
