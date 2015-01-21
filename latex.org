@@ -18,3 +18,10 @@ First, we need to load up auctex.
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
 #+end_src
+
+Also, I like using Okular as my PDF viewer.
+
+#+begin_src emacs-lisp :tangle yes
+(eval-after-load "tex"
+  '(add-to-list 'TeX-view-program-selection '(output-pdf "Okular")))
+#+end_src
