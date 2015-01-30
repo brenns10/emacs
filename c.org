@@ -1,0 +1,30 @@
+* Introduction
+
+This is to make my C programming more comfortable.
+
+* Implementation
+
+#+begin_src emacs-lisp :tangle yes
+(defun* get-closest-dirname (&optional (file "Makefile"))
+  "Determine the pathname of the first instance of FILE starting from the
+   current directory towards root.  This may not do the correct thing in
+   presence of links. If it does not find FILE, then it shall return the name of
+   FILE in the current directory, suitable for creation"
+  (let ((root (expand-file-name "/")))
+		      (loop
+			for d = default-directory then (expand-file-name ".." d)
+			if (file-exists-p (expand-file-name file d))
+			return d
+			if (equal d root)
+			return nil)))
+
+(require 'compile)
+(add-hook 'c-mode-hook
+ (lambda ()
+  (let ((dir (get-closest-dirname)))
+   (set (make-local-variable 'compile-command)
+        (format "make -k -C %s -f %s" dir (expand-file-name "Makefile" dir))))))
+
+(global-set-key (kbd "C-x C-m") 'compile)
+
+#+end_src
