@@ -3,4 +3,6 @@ syntax: glob
 elpa
 emacs-backup
 recentf
+.#recentf
 auto-save-list
+session.*
