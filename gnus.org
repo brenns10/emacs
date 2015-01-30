@@ -121,7 +121,9 @@ need to worry about correctly exiting it myself.
 
 #+begin_src emacs-lisp :tangle yes
 (setq gnus-interactive-exit nil)
-(add-hook 'kill-emacs-hook 'gnus-group-exit)
+(add-hook 'kill-emacs-hook (lambda ()
+                            (when (boundp 'gnus-group-exit)
+                                 (gnus-group-exit))))
 #+end_src
 
 Don't let Gnus take the entire window **every time I open something**.
