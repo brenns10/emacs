@@ -30,3 +30,11 @@ Also, I like using Okular as my PDF viewer.
                                                   (interactive)
                                                   (doc-view-revert-buffer t t))))
 #+end_src
+
+Listings should allow dollar signs within them.
+
+https://tex.stackexchange.com/questions/111289/how-to-make-auctex-ignore-syntax-highlighting-within-environment
+
+#+begin_src emacs-lisp :tangle yes
+(setq LaTeX-verbatim-environments-local '("lstlisting"))
+#+end_src
