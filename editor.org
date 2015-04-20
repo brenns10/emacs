@@ -100,3 +100,17 @@ Remove unnecessary UI elements.
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (setq inhibit-startup-message t)
 #+end_src
+
+Define a command to kill all buffers!
+
+#+begin_src emacs-lisp :tangle yes
+(defun close-all-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (buffer-list)))
+#+end_src
+
+Map C-x C-b to a nicer buffer list.
+
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+#+end_src
