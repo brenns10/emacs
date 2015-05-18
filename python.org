@@ -14,3 +14,11 @@ Elpy is an Emacs/Python integration package.
 (setq elpy-rpc-backend "jedi")
 (elpy-use-ipython)
 #+end_src
+
+I prefer to have my docstrings either be all in one line, or else have the first
+line separate from the quotes, and no newline at the end.  That is the
+"symmetric" style of docstrings according to python-mode.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq python-fill-docstring-style 'symmetric)
+#+end_src
