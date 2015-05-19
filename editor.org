@@ -57,7 +57,6 @@ Show a rule line for the fill-column in each buffer.  I do want FCI in org mode.
 
 #+begin_src emacs-lisp :tangle yes
 (setq fci-rule-width 3)
-(define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
 (add-hook 'prog-mode-hook 'turn-on-fci-mode)
 (add-hook 'org-mode-hook 'turn-on-fci-mode)
 #+end_src
