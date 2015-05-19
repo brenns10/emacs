@@ -104,7 +104,7 @@ Remove unnecessary UI elements.
 Define a command to kill all buffers!
 
 #+begin_src emacs-lisp :tangle yes
-(defun close-all-buffers ()
+(defun kill-all-buffers ()
   (interactive)
   (mapc 'kill-buffer (buffer-list)))
 #+end_src
