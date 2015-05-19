@@ -55,6 +55,7 @@ Emacs.  This requires it and sets keyboard shortcuts and other stuff.
 (helm-mode 1)
 
 (setq helm-dash-browser-func 'eww)
+(setq helm-dash-docsets-path (expand-file-name "~/.local/share/Zeal/Zeal/docsets"))
 (global-set-key (kbd "C-c h d") 'helm-dash)
 #+end_src
 
