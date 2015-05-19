@@ -7,7 +7,7 @@ This file contains all my basic editor preferences.
 
 #+name: requirements
 #+begin_src emacs-lisp
-(stemacs-require '(solarized-theme dired+ tabbar))
+(stemacs-require '(solarized-theme dired+ tabbar fill-column-indicator))
 (require 'whitespace)
 #+end_src
 
@@ -30,11 +30,10 @@ I love the solarized dark theme, so that will be my theme.
 (load-theme 'solarized-dark t)
 #+end_src
 
-Some of my whitespace preferences such as tab use, tab width, trailing
-whitespace, and overflowing lines.
+Some of my whitespace preferences such as tab use, tab width, and trailing
+whitespace.
 
-#+name: init
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; ONLY use spaces to indent things.  I like using spaces, but more importantly
 ;; is that I use consistency.  I think that emaacs shouldn't define TAB=8 spaces
 ;; and then when I indent by 10 spaces, do a tab and 2 spaces.  Use tabs or use
@@ -45,8 +44,15 @@ whitespace, and overflowing lines.
 
 ;; Whitespace mode -- highlight trailing whitespace, tabs, and parts of lines
 ;; longer than 80 characters.
-(setq whitespace-style '(face trailing tabs lines-tail))
+(setq whitespace-style '(face trailing tabs))
 (global-whitespace-mode t)
+#+end_src
+
+Show a rule line for the fill-column in each buffer.
+
+#+begin_src emacs-lisp :tangle yes
+(define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+(global-fci-mode 1)
 #+end_src
 
 Enable line numbering in each buffer.
