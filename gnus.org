@@ -16,8 +16,8 @@ Also, BBDB, which is not installed by default.
 
 ** Configuration
 
-This is from the [[http://www.emacswiki.org/emacs/GnusGmail][Emacs Wiki]]
-article on Gnus.  These are the IMAP and SMTP settings necessary.
+This is from the [[http://www.emacswiki.org/emacs/GnusGmail][Emacs Wiki]] article on Gnus.  These are the IMAP and SMTP
+settings necessary.
 
 #+name: init
 #+begin_src emacs-lisp
@@ -92,6 +92,16 @@ visible.
      (display . all)
      (gnus-use-scoring nil))))
 (setq gnus-permanently-visible-groups "INBOX")
+#+end_src
+
+Gnus takes an obnoxiously long time to load, since it has to get a listing from
+every single folder before it loads.  I only want my Inbox -- none of the
+folders matter to me, so long as I can read, reply, and archive.  So, I set the
+inbox to level 1, and everything else to level 7, and then set Gnus to only read
+from level 1 at startup.
+
+#+begin_src emacs-lisp :tangle yes
+(setq gnus-activate-level 1)
 #+end_src
 
 This has Gnus display the newest emails first.
