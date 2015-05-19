@@ -51,6 +51,7 @@ whitespace.
 Show a rule line for the fill-column in each buffer.
 
 #+begin_src emacs-lisp :tangle yes
+(setq fci-rule-width 3)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
 (global-fci-mode 1)
 #+end_src
