@@ -50,6 +50,13 @@ particular mode or anything else.
 (stemacs-load "editor.org")
 #+end_src
 
+The PDF module includes installation and configuration for PDFView/pdf-tools,
+which is far superior to the DocView that comes with Emacs.
+
+#+begin_src emacs-lisp :tangle yes
+(stemacs-load "pdf.org")
+#+end_src
+
 Yasnippet
 
 #+begin_src emacs-lisp :tangle yes

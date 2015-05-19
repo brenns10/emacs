@@ -1,0 +1,26 @@
+* Introduction
+
+  Admittedly, I really do like Okular as a PDF viewer.  But compared to being
+  able to view them in Emacs, I'd prefer Emacs, because it's just so much more
+  convenient (except for printing, I guess).  However, DocView mode is pretty
+  bad for PDFs, because it converts to PNG at a crappy resolution.  So, PDFView
+  (from pdf-tools) is my new replacement.
+
+* Implementation
+
+** Required Packages
+
+#+begin_src emacs-lisp :tangle yes
+  (stemacs-require '(pdf-tools))
+  (require 'pdf-tools)
+#+end_src
+
+** Settings
+
+#+begin_src emacs-lisp :tangle yes
+  (pdf-tools-install)
+#+end_src
+
+Above, we "install" PDF tools.  This runs a server process to render PDFs.  If
+the server process hasn't been compiled, it will do that too.  In order for the
+build to work, you'll want the =poppler-glib= package installed (on Arch).

@@ -31,7 +31,11 @@ I love the solarized dark theme, so that will be my theme.
 #+end_src
 
 Some of my whitespace preferences such as tab use, tab width, and trailing
-whitespace.
+whitespace.  Note that here, and in a few more places later on, I add a hook to
+prog-mode instead of using the provided global modes.  This is because the
+global modes will royally mess up buffers that aren't supposed to contain
+programming-related text!  For example, in PDFView, if you have basically any
+global mode running, the buffer will pretty much immediately lock up Emacs.
 
 #+begin_src emacs-lisp :tangle yes
 ;; ONLY use spaces to indent things.  I like using spaces, but more importantly
@@ -45,23 +49,25 @@ whitespace.
 ;; Whitespace mode -- highlight trailing whitespace, tabs, and parts of lines
 ;; longer than 80 characters.
 (setq whitespace-style '(face trailing tabs))
-(global-whitespace-mode t)
+(add-hook 'prog-mode-hook (lambda () (whitespace-mode t)))
+(add-hook 'org-mode-hook (lambda () (whitespace-mode t)))
 #+end_src
 
-Show a rule line for the fill-column in each buffer.
+Show a rule line for the fill-column in each buffer.  I do want FCI in org mode.
 
 #+begin_src emacs-lisp :tangle yes
 (setq fci-rule-width 3)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
-(global-fci-mode 1)
+(add-hook 'prog-mode-hook 'turn-on-fci-mode)
+(add-hook 'org-mode-hook 'turn-on-fci-mode)
 #+end_src
 
-Enable line numbering in each buffer.
+Enable line numbering in each buffer.  (I don't want this in org mode).
 
 #+name: init
 #+begin_src emacs-lisp
-;; Line numbering on every buffer!!
-(global-linum-mode t)
+;; Line numbering on code buffers!!
+(add-hook 'prog-mode-hook (lambda () (linum-mode t)))
 #+end_src
 
 Highlighting parenthesis and brackets that match.
