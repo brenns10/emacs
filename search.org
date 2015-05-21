@@ -1,0 +1,103 @@
+* Introduction
+
+  Sometimes I want to make a quick web search, and I'd prefer not to leave
+  Emacs.  Sure, I could switch over to a different workspace and open a browser,
+  but I'd much rather do it in Emacs if possible.  =eww= will let you search
+  instead of enter a URL, but you only get one search engine (which is, by
+  default, Duck Duck Go).  I'm used to the wonderful interface of Chrome, which
+  allows you to use a keyword to specify your search engine, right within the
+  "Omnibox".  Anything else feels crude.  So, I decided I would implement my own
+  search solution!
+
+* Interface
+
+  The code below creates two commands:
+
+  - =search-web= allows you to search by specifying an engine like this:
+    "ddg:search term here", or by omitting the engine and just entering a term,
+    so that you use your default search engine.
+  - =search-engine= allows you to search by prompting you for a search engine
+    and a search term seperately.  This is actually a helper function to
+    =search-web=, but maybe you'd prefer to be prompted!  Who am I to judge?
+
+  Both functions will give you an error message if you provide a bad search
+  engine.
+
+* Installation
+
+  You can "install" this into your Emacs by simply adding the code blocks below
+  to your =.emacs=.  Or, if you happen to use an Org-Babel init system [[https://github.com/brenns10/emacs][like I
+  do]], you can just drop this file in there and add it to your list of modules.
+
+* Implementation
+
+  So, first we need a list of search engines.  I define search engines to be a
+  list containing the following items:
+  - A list of keyword names for the search engine
+  - A format string containing one =%s= where the url-encoded search term goes.
+
+  I created =search-engines= as a list of these search engines.  You can
+  customize them as much as you'd like.  Also, =search-engine-default= is the
+  keyword name of a default search engine, for when you don't specify it in
+  =search-web=.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq search-engines
+        '(
+          (("google" "g") "https://google.com/search?q=%s")
+          (("duckduckgo" "d" "ddg") "https://duckduckgo.com/?q=%s")
+          (("rfc" "r") "https://www.rfc-editor.org/rfc/rfc%s.txt")
+          (("rfc-kw" "rk") "https://www.rfc-editor.org/search/rfc_search_detail.php?title=%s")
+          ))
+  (setq search-engine-default "google")
+#+end_src
+
+  Below is a nifty little recursive helper function to get a search engine's url
+  format string from a keyword.
+
+#+begin_src emacs-lisp :tangle yes
+  (defun search-get-engine (engine-name engine-list)
+    (cond
+     ((null engine-list) nil)
+     ((member engine-name (caar engine-list)) (cadar engine-list))
+     (t (search-get-engine engine-name (cdr engine-list)))))
+#+end_src
+
+  Now, all that's left is the two interactive commands.  The first will prompt
+  for an engine, followed by a search term.  If the search term is unknown,
+  we'll print an error message in the minibuffer, and fail.
+
+#+begin_src emacs-lisp :tangle yes
+  (defun search-engine (engine-name term)
+    "Search for a term using an engine."
+    (interactive "MEngine: \nMTerm: ")
+    (let* ((url (search-get-engine engine-name search-engines)))
+      (if (equal url nil)
+          (message "Error: search engine \"%s\" unknown." engine-name)
+        (eww (format url (url-hexify-string term))))))
+#+end_src
+
+  The second command is more of a "dwim" (i.e. do what I mean) command.  It uses
+  your default search engine when you don't use a colon.  When you do, it
+  assumes that the first part is to specify your search engine (like this:
+  "rfc:793").  If you'd like to use a colon in an actual search term, you'll
+  have to explicitly specify your search engine (even if you'd like to use the
+  default).
+
+#+begin_src emacs-lisp :tangle yes
+  (defun search-web (term)
+    "Search the web using google or a specified engine."
+    (interactive "MQuery: ")
+    (let ((idx (position ?: term)))
+      (if (equal idx nil)
+          (search-engine search-engine-default term)
+        (search-engine (subseq term 0 idx)
+                       (subseq term (+ 1 idx))))))
+#+end_src
+
+  To use this, you can always use =M-x search-web=.  However, you may want to do
+  it quicker.  In that case, I think =C-c w= is a good choice for a shortcut:
+
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-c w") 'search-web)
+#+end_src
