@@ -46,10 +46,14 @@
 (defun is-org-file-p (name)
   (and (> (length name) 3) (string= ".org" (substring name -4))))
 
+;; Add any filenames you don't want loaded here! (as "strings")
+(setq disabled-module-list '())
+
 ;; Load all org-mode init files in this directory!!
 (dolist (file (directory-files-and-attributes emacs-dir))
   (when (is-org-file-p (car file))
-    (load-org-init-file (car file))))
+    (unless (member (car file) disabled-module-list)
+      (load-org-init-file (car file)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
