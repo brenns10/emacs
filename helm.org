@@ -5,7 +5,7 @@ Emacs.  This requires it and sets keyboard shortcuts and other stuff.
 ** Required Packages
 #+name: requirements
 #+begin_src emacs-lisp
-(stemacs-require '(helm helm-dash))
+(require-package '(helm helm-dash))
 (require 'helm-config)
 #+end_src
 ** Settings

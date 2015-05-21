@@ -7,7 +7,7 @@ This file contains all my basic editor preferences.
 
 #+name: requirements
 #+begin_src emacs-lisp
-(stemacs-require '(solarized-theme dired+ tabbar fill-column-indicator))
+(require-package '(solarized-theme dired+ tabbar fill-column-indicator))
 (require 'whitespace)
 #+end_src
 

@@ -4,7 +4,7 @@ Install yasnippet, and load snippet directory.
 ** Required Packages
 #+name: requirements
 #+begin_src emacs-lisp
-(stemacs-require '(yasnippet))
+(require-package '(yasnippet))
 (require 'yasnippet)
 #+end_src
 ** Settings

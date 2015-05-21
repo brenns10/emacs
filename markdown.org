@@ -7,5 +7,5 @@ Gotta use that Markdown yo.
 Need markdown-mode.
 
 #+begin_src emacs-lisp :tangle yes
-(stemacs-require '(markdown-mode))
+(require-package '(markdown-mode))
 #+end_src

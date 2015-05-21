@@ -11,7 +11,7 @@ You do need gnus.  However, I'm pretty sure that it comes preinstalled on Emacs.
 Also, BBDB, which is not installed by default.
 
 #+begin_src emacs-lisp :tangle yes
-(stemacs-require '(bbdb))
+(require-package '(bbdb))
 #+end_src
 
 ** Configuration

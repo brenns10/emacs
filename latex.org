@@ -8,7 +8,7 @@ We want AucTex.  But, I have it installed through my package manager, not
 through emacs.
 
 #+begin_src emacs-lisp :tangle yes
-;; (stemacs-require '(auctex))
+;; (require-package '(auctex))
 #+end_src
 
 ** Settings

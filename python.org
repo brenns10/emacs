@@ -4,7 +4,7 @@ Elpy is an Emacs/Python integration package.
 ** Required Packages
 #+name: requirements
 #+begin_src emacs-lisp
-(stemacs-require '(elpy))
+(require-package '(elpy))
 #+end_src
 ** Settings
 

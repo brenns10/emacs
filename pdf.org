@@ -11,7 +11,7 @@
 ** Required Packages
 
 #+begin_src emacs-lisp :tangle yes
-  (stemacs-require '(pdf-tools))
+  (require-package '(pdf-tools))
   (require 'pdf-tools)
 #+end_src
 
