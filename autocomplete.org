@@ -1,40 +1,22 @@
 * Introduction
-I was using the auto-complete-mode, but Company Mode is better for Python.  I'll
-have to get stuff working with Company Mode in C/C++.
-* Implementation
-** Required Packages
-#+name: requirements
+
+At one point, I used the AutoComplete package for Emacs.  However, when I
+started using [[file+emacs:elpy.org][Elpy]], which required Company Mode, I had to switch.  The majority
+of research seems to indicate that Company Mode is much better anyway.
+
+* Packages
+
+Just one right now, company-mode!
+
 #+begin_src emacs-lisp
 (require-package '(company))
-;(require 'auto-complete)
 #+end_src
-** Settings
 
-#+name: init
+* Settings
+
+Enable the company global mode.
+
 #+begin_src emacs-lisp
-;;; Enable Auto Complete
-;(global-auto-complete-mode t)
-;
-;;; Configure Auto Complete dictionaries
-;(require 'auto-complete-config)
-;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-;(ac-config-default)
-;
-;;; The yas source seems to fail a lot...
-;(setq ac-source-yasnippet nil)
-;
-;;; When Auto-Complete auto-starts, it forces Semantic to parse the whole file.
-;;; That is not behavior I want when working on large C files.
-;(setq ac-auto-start nil)
-;
-;;; These may already be defaults.  These are keys for doing basic stuff in
-;;; completion menus.
-;(define-key ac-completing-map "\M-/" 'ac-stop)
-;(define-key ac-completing-map "TAB" 'ac-expand)
-;(define-key ac-completing-map "RET" 'ac-complete)
-;
-;;; And, this is the trigger key for outside of ac-completing mode.
-;(ac-set-trigger-key "TAB")
-
-
+(add-hook 'after-init-hook 'global-company-mode)
+(global-set-key (kbd "M-/") 'company-complete)
 #+end_src
