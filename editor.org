@@ -7,11 +7,18 @@ This file contains all my basic editor preferences.
 
 #+name: requirements
 #+begin_src emacs-lisp
-(require-package '(solarized-theme dired+ tabbar fill-column-indicator))
+(require-package '(solarized-theme dired+ tabbar fill-column-indicator diff-hl))
 (require 'whitespace)
+(require 'diff-hl)
 #+end_src
 
 ** Settings
+
+Highlight differences from current VC status.
+
+#+begin_src emacs-lisp :tangle yes
+(global-diff-hl-mode t)
+#+end_src
 
 I would like to have 80 character columns instead of the ridiculously cramped
 default of 70.
