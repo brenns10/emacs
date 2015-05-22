@@ -7,3 +7,5 @@ recentf
 auto-save-list
 session.*
 url
+semanticdb
+projectile-bookmarks.eld
