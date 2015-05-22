@@ -6,21 +6,28 @@
   bad for PDFs, because it converts to PNG at a crappy resolution.  So, PDFView
   (from pdf-tools) is my new replacement.
 
-* Implementation
+* External Configuration
 
-** Required Packages
+You need to have the =poppler-glib= package installed in order to use this
+module.  On the first run, the =(pdf-tools-install)= command will attempt to
+compile a server program, which needs to have =poppler-glib=.  For Arch, =sudo
+pacman -S poppler-glib= does the trick.
+
+* Packages
+
+We need to make sure =pdf-tools= is installed, and then =(require)= it.
 
 #+begin_src emacs-lisp :tangle yes
   (require-package '(pdf-tools))
   (require 'pdf-tools)
 #+end_src
 
-** Settings
+* Settings
+
+The only configuration required (so far) is to "install" the package on startup.
+This will attempt to build the server if it isn't already built, and then run
+it, and set up PDFView as the default PDF viewer.
 
 #+begin_src emacs-lisp :tangle yes
   (pdf-tools-install)
 #+end_src
-
-Above, we "install" PDF tools.  This runs a server process to render PDFs.  If
-the server process hasn't been compiled, it will do that too.  In order for the
-build to work, you'll want the =poppler-glib= package installed (on Arch).
