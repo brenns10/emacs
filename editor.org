@@ -20,6 +20,18 @@ Highlight differences from current VC status.
 (global-diff-hl-mode t)
 #+end_src
 
+Use windmove shortcuts (i.e. Shift arrow key) to switch windows.  Better than
+C-x o, when I can remember.
+
+#+begin_src emacs-lisp :tangle yes
+(windmove-default-keybindings)
+;; Make windmove work in org-mode:
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+#+end_src
+
 I would like to have 80 character columns instead of the ridiculously cramped
 default of 70.
 
