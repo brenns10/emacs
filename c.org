@@ -1,30 +1,81 @@
 * Introduction
 
-This is to make my C programming more comfortable.
+This contains a lot of C/C++ specific configurations that make working with C
+even nicer and cooler.  A lot of stuff here relies on other configuration files.
+Especially Helm!  The Helm and C configurations have a lot of stuff that overlap
+with each other.
 
-* Implementation
+* Packages
+
+We need quite a few packages for my preferred C environment.  C-mode, Semantic,
+and EDE come with Emacs (hooray CEDET).  Sr-Speedbar puts a directory listing
+bar in a window to one side of your buffer.  Function args will show what
+arguments you need to pass when you call a function, and also provides the "moo"
+commands below.
+
+Projectile speedbar integrates the speedbar with projectile so that you always
+see the project root.
 
 #+begin_src emacs-lisp :tangle yes
-(defun* get-closest-dirname (&optional (file "Makefile"))
-  "Determine the pathname of the first instance of FILE starting from the
-   current directory towards root.  This may not do the correct thing in
-   presence of links. If it does not find FILE, then it shall return the name of
-   FILE in the current directory, suitable for creation"
-  (let ((root (expand-file-name "/")))
-		      (loop
-			for d = default-directory then (expand-file-name ".." d)
-			if (file-exists-p (expand-file-name file d))
-			return d
-			if (equal d root)
-			return nil)))
+(require-package '(sr-speedbar function-args projectile projectile-speedbar))
+(require 'cc-mode)
+(require 'semantic)
+(require 'ede)
+(require 'function-args)
+(require 'projectile)
+(require 'projectile-speedbar)
+#+end_src
 
-(require 'compile)
-(add-hook 'c-mode-hook
- (lambda ()
-  (let ((dir (get-closest-dirname)))
-   (set (make-local-variable 'compile-command)
-        (format "make -k -C %s -f %s" dir (expand-file-name "Makefile" dir))))))
+* Settings
 
-(global-set-key (kbd "C-x C-m") 'compile)
+Enable Projectile (not just for C!) and set the compile command to be nicer.
 
+#+begin_src emacs-lisp :tangle yes
+(projectile-global-mode)
+(define-key projectile-mode-map (kbd "C-x C-m") 'projectile-compile-project)
+#+end_src
+
+Set the speedbar to be skipped with C-x o.
+
+#+begin_src emacs-lisp :tangle yes
+(setq sr-speedbar-skip-other-window-p t)
+#+end_src
+
+Here is where I set up Semantic to parse headers and other include files to
+provide a list of symbols, which Company-mode uses to do completion in C/C++
+files.
+
+#+begin_src emacs-lisp :tangle yes
+(global-semanticdb-minor-mode 1)
+(global-semantic-idle-scheduler-mode 1)
+(semantic-mode 1)
+#+end_src
+
+Also, we set up EDE mode, and configure some projects.  Sadly, you can't put
+these configurations with the projects themselves.
+
+#+begin_src emacs-lisp :tangle yes
+(global-ede-mode)
+(ede-cpp-root-project "cky"
+                      :file "~/repos/cky/Makefile"
+                      :include-path '("/libstephen/inc"))
+(ede-cpp-root-project "libstephen"
+                      :file "~/repos/libstephen/Makefile"
+                      :include-path '("/inc"))
+#+end_src
+
+This keybinding pops open a buffer allowing you to jump to a tag definition in a
+C/C++ file.  You can use helm-style filters to find the exact tag.  Moo-complete
+does a similar box, but for auto completion.  You can do the helm-style
+filtering.  I'm not sure if that's any better than what Company does for me.
+The ones below that allow you to show function arguments and dismiss them.
+
+#+begin_src emacs-lisp :tangle yes
+(define-key c-mode-map (kbd "C-c o") 'moo-jump-local)
+(define-key c-mode-map [(control tab)] 'moo-complete)
+(define-key c++-mode-map [(control tab)] 'moo-complete)
+(define-key c-mode-map (kbd "M-o") 'fa-show)
+(define-key c++-mode-map (kbd "M-o") 'fa-show)
+(define-key c-mode-map (kbd "M-u") 'fa-abort)
+(define-key c++-mode-map (kbd "M-u") 'fa-abort)
 #+end_src

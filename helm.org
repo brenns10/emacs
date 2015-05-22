@@ -1,24 +1,47 @@
 * Introduction
+
 Helm is a pretty neat package that adds more effective navigation commands to
 Emacs.  This requires it and sets keyboard shortcuts and other stuff.
-* Implementation
-** Required Packages
-#+name: requirements
-#+begin_src emacs-lisp
-(require-package '(helm helm-dash))
-(require 'helm-config)
-#+end_src
-** Settings
 
-#+name: init
-#+begin_src emacs-lisp
+* External Configuration
+
+If you want to use the Dash/Zeal integration, you'll need that.  Also, if you
+want to use GTAGS (which are the bee's knees), you'll need GNU Global.  For
+Arch, just do =yaourt -S global=, since it's an AUR package.
+
+Additionally, when you use GTAGS with a C project, you'll need to go to the
+project root and use the command =gtags=.
+
+* Packages
+
+We need Helm.  Also, Helm-Dash provides integration with Dash/Zeal.  I haven't
+really used it, so Helm-Dash could be a candidate for deletion someday.
+Finally, we want to also have Helm-Gtags, so that you can jump to tag
+definitions within your project.
+
+#+begin_src emacs-lisp :tangle yes
+(require-package '(helm helm-dash helm-gtags))
 (require 'helm-config)
+(require 'helm-gtags)
+#+end_src
+
+* Helm
+
+The default "C-x c" is quite close to "C-x C-c", which quits Emacs.  I changed
+it to "C-c h". Note: We must set "C-c h" globally, because we cannot change
+`helm-command-prefix-key' once `helm-config' is loaded.
+
+#+begin_src emacs-lisp :tangle yes
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
 ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-unset-key (kbd "C-x c"))
+#+end_src
 
+Adjust key bindings for the actual Helm completion mode.
+
+#+begin_src emacs-lisp :tangle yes
 (eval-after-load 'helm
   '(progn
      ; rebind tab to do persistent action
@@ -28,10 +51,19 @@ Emacs.  This requires it and sets keyboard shortcuts and other stuff.
      ; list actions using C-z
      (define-key helm-map (kbd "C-z")  'helm-select-action)
      ))
+#+end_src
 
+This appears to add a Google search option.  It shows suggestions, which is
+nice.  And it opens in a browser, not in =eww=.
+
+#+begin_src emacs-lisp :tangle yes
 (when (executable-find "curl")
   (setq helm-google-suggest-use-curl-p t))
+#+end_src
 
+Here we have some Helm options, which are mostly self-documented.
+
+#+begin_src emacs-lisp :tangle yes
 (setq
  ; do not display invisible candidates
  helm-quick-update                     t
@@ -46,26 +78,54 @@ Emacs.  This requires it and sets keyboard shortcuts and other stuff.
  ; scroll 8 lines other window using M-<next>/M-<prior>
  helm-scroll-amount                    8
  helm-ff-file-name-history-use-recentf t)
+#+end_src
 
+Here I will actually rebind some basic Emacs navigation commands to their helm
+equivalents.
+
+- =helm-M-x= gives you much nicer searching capabilities through the mess of
+  possible commands in the M-x menu.
+- =helm-show-kill-ring= is a ridiculously convenient replacement for the normal
+  "yank cycling" ability Emacs has by default.  When you want to yank something
+  you killed a few kills before, the default is to just hit M-y a bunch of
+  times, until you find your killed text in the kill ring.  But with the Helm
+  version, M-y just pops up a menu that shows the kill rink, and you can
+  navigate through and hit Enter on the one you want to yank!  Much nicer.
+- =helm-mini= gives you a buffer selection panel with the fuzzy matching we
+  love.  It also gives you a recent file list that's searchable, so you can load
+  recent files that you maybe forgot that you killed.
+- =helm-find-files= is the fuzzy-matching version of C-x C-f.  It is a quite
+  worthy replacement for the original.  You can use patterns to narrow down the
+  listing of files by extension, etc.
+
+#+begin_src emacs-lisp :tangle yes
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
+#+end_src
 
+And finally, we turn on Helm.
+
+#+begin_src emacs-lisp :tangle yes
 (helm-mode 1)
+#+end_src
 
+* Helm Dash
+
+This configures Helm Dash, which lets you search Zeal/Dash docsets from a Helm
+buffer.  I'm setting it up to work with =eww= so I don't have to switch windows.
+
+#+begin_src emacs-lisp :tangle yes
 (setq helm-dash-browser-func 'eww)
 (setq helm-dash-docsets-path (expand-file-name "~/.local/share/Zeal/Zeal/docsets"))
 (global-set-key (kbd "C-c h d") 'helm-dash)
 #+end_src
 
-** Hooks
+Here are a bunch of language hooks that will set the docsets I want available
+for each lanugage mode.
 
-The various modes I use need hooks.  This code adds hooks that set the docsets
-for each programming language I use.
-
-#+name: init
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (add-hook 'c-mode-hook
           (lambda ()
             (setq-local helm-dash-docsets '("C"))))
@@ -80,3 +140,69 @@ for each programming language I use.
           (lambda
             (setq-local helm-dash-docsets '("Java SE7"))))
 #+end_src
+
+* Helm GTAGS
+
+Now here we set up Helm Gtags.  A good deal of this code came from this [[https://tuhdo.github.io/c-ide.html][C IDE]]
+article.  It is a *wonderful* resource for C, CEDET, Company Mode, Helm,
+etc. related configuration.  This section of =setq='s is mostly self
+documenting.
+
+#+begin_src emacs_lisp :tangle yes
+(setq
+ helm-gtags-ignore-case t
+ helm-gtags-auto-update t
+ helm-gtags-use-input-at-cursor t
+ helm-gtags-pulse-at-cursor t
+ helm-gtags-prefix-key "\C-cg"
+ helm-gtags-suggested-key-mapping t
+ )
+#+end_src
+
+There is a Helm Gtags minor mode that has to be enabled on C/C++ files.  This
+does so.
+
+#+begin_src emacs-lisp :tangle yes
+;; Enable helm-gtags-mode
+(add-hook 'dired-mode-hook 'helm-gtags-mode)
+;(add-hook 'eshell-mode-hook 'helm-gtags-mode)
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook 'helm-gtags-mode)
+#+end_src
+
+Finally, this is a list of the suggested keybindings for Helm Gtags taken from
+the above article.  I fully agree with them!
+
+#+begin_src emacs-lisp :tangle yes
+(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+(define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+(define-key helm-gtags-mode-map (kbd "C-c g r") 'helm-gtags-find-rtag)
+(define-key helm-gtags-mode-map (kbd "C-c g s") 'helm-gtags-find-symbol)
+#+end_src
+
+* Guide to Useful Features
+
+Using Helm takes some getting used to.  I'm not going to document the features
+of Helm here, but there are good resources out there (accessible by Google).
+For the main features of Helm, I've set it up so that default Emacs keybindings
+are rebound to Helm equivalents.
+
+For Helm Dash, you simply use C-c h d (think "C-c helm dash").  Then you can
+search for documents.
+
+For Helm GTAGS, there is a whole host of goodies.  These really only apply to C
+and C++, but they have to be configured with Helm, so I placed the configuration
+and instructions here.
+
+- With point on a tag name (like a function), use M-. to go to its definition.
+- To return from a definition visit, use M-, .
+- You can use the C-c < or C-c > to go through your tag visiting history.  I'm
+  not sure how that differs from using M-,.
+- There is a keyboard shortcut (C-c g a) to find all tags in your function.  I'm
+  not really sure how helpful that is though.
+- With point on a tag name, use "C-c g r" to find references!  Oh so useful.
