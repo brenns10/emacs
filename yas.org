@@ -11,6 +11,5 @@ Install yasnippet, and load snippet directory.
 
 #+name: init
 #+begin_src emacs-lisp
-(add-to-list 'yas-snippet-dirs "~/.snippets")
 (yas-global-mode 1)
 #+end_src
