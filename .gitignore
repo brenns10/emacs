@@ -9,3 +9,5 @@ session.*
 url
 semanticdb
 projectile-bookmarks.eld
+projectile.cache
+ircpass

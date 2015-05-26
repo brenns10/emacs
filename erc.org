@@ -1,0 +1,42 @@
+* Introduction
+
+IRC in Emacs!  What could go wrong?
+
+* Packages
+
+Since I use a ZNC server, this helps a bit.
+
+#+begin_src emacs-lisp :tangle yes
+(require-package '(erc znc))
+(require 'erc)
+(require 'znc)
+#+end_src
+
+* External Configuration
+
+I have a password for my ZNC server.  I'm not version controlling it (duh).  So,
+it needs to be placed in my .emacs.d directory as =ircpass=.
+
+* Configuration
+
+This is my server.
+
+#+begin_src emacs-lisp :tangle yes
+
+  (defun read-lines (path)
+    (with-temp-buffer
+      (insert-file-contents path)
+      (split-string (buffer-string) "\n" t)))
+
+  (let ((password (car (read-lines (expand-file-name "ircpass"
+                                                     user-emacs-directory)))))
+    (setq znc-servers
+          (list (list "penthousecult.noip.me" 6697 t
+                       (list (list 'CWRU "stephen" password))))))
+#+end_src
+
+Notification support
+
+#+begin_src emacs-lisp :tangle yes
+(add-to-list 'erc-modules 'notifications)
+#+end_src
