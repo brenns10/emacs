@@ -65,11 +65,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(safe-local-variable-values
-   (quote
-    ((company-clang-arguments "-Isrc/" "-Ilibstephen/inc/")
-     (company-clang-arguments "-Iinc/")
-     (company-clang-arguments "-I/home/stephen/repos/cky/libstephen/inc/" "-I/home/stephen/repos/cky/src/")))))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
