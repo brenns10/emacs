@@ -22,10 +22,6 @@ void $1_destroy($1 *obj)
 }
 
 void $1_delete($1 *obj) {
-  if (obj) {
-    $1_destroy(obj);
-    smb_free(obj);
-  } else {
-    fprintf(stderr, "$1_delete: called with null pointer.\n");
-  }
+  $1_destroy(obj);
+  smb_free(obj);
 }
