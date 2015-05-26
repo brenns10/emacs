@@ -58,7 +58,7 @@ these configurations with the projects themselves.
 (global-ede-mode)
 (ede-cpp-root-project "cky"
                       :file "~/repos/cky/Makefile"
-                      :include-path '("/libstephen/inc"))
+                      :include-path '("/libstephen/inc" "/src"))
 (ede-cpp-root-project "libstephen"
                       :file "~/repos/libstephen/Makefile"
                       :include-path '("/inc"))
