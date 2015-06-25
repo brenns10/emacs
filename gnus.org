@@ -88,22 +88,26 @@ the "To:" field, do this:
 
 *** Search
 
-TBD
+You can use Gnus to search for messages on the IMAP server.  Thankfully, there's
+no additional setup for this.
 
 ** Usage
-
 Gnus is primarily a news reader that happens to support email.  So, it has some
 weird idiosyncracies, which I've tried to eliminate in my configuration below.
 
 There are three views in Gnus.  The Group view, the Summary view, and the
-Article view.  When you load up Gnus, you see the Group view.  You can navigate
-that like normal, with =C-n= and =C-p=, or arrow keys.  You can refresh the
-unread counts by hitting =g=.  Hit enter on the group (this is basically a
-synonym for folder) you want to open.  You can also left click on a group name
-to open it.  This brings you to the Summary view, which shows your messages in
-that folder.  If you have a lot of messages in that folder, you may be prompted
-for how many to load.  More means longer loading time.
+Article view.
 
+*** Group View
+When you load up Gnus, you see the Group view.  You can navigate that like
+normal, with =C-n= and =C-p=, or arrow keys.  You can refresh the unread counts
+by hitting =g=.  Hit enter on the group (this is basically a synonym for folder)
+you want to open.  You can also left click on a group name to open it.  This
+brings you to the Summary view, which shows your messages in that folder.  If
+you have a lot of messages in that folder, you may be prompted for how many to
+load.  More means longer loading time.
+
+*** Summary View
 In the Summary view, you can navigate with just the =n= and =p= buttons, which I
 find helpful.  You can hit enter to open up a message.  This will split your
 window so that you can see the message (in the Article view) and the Summary
@@ -114,6 +118,7 @@ to quote the original, use =R=.  Reply all (Wide reply) using =w=, and
 similarly, include a quote with =W=.  Exit the summary (and any opened articles)
 with =q=.
 
+*** Article view
 The Article view is tied to the Summary view, which is why it's usually split
 from the Summary view.  You can do all the reply shortcuts in the Article view,
 and you can also scroll using normal keys.  I find that once I open an article
@@ -123,8 +128,27 @@ your point is in the Summary mode, use the shortcut =v x= to bury the current
 article window.  Also, if you hit =q= in the Article mode, it will exit out of
 both the article and the summary view.
 
+*** General Keys
+
 Anywhere within Gnus, you can hit =m= to start writing a message.  Anywhere
 else, you can use =C-x m= to compose a message as well.
+
+Be careful to not use many other keys in Gnus.  Gnus has a ton of key bindings,
+and you could accidentally use one that you don't understand, and is very
+confusing.  If you find yourself lost in Gnus, hit =q= until everything is
+exited, and start it up again.
+
+*** Searching
+
+One of the things that makes Google Inbox nice is search.  You can search for
+messages that aren't in your inbox.  You can use Gnus to search for messages on
+the server as well.  In Gnus, search operates on a specific folder, so you'll
+want to have your "[Gmail]/All Mail" folder visible in the Group buffer.  Just
+put your point on that group, and hit =G G= to open a search prompt.  Type your
+search query, and you'll get a Summary buffer full of results.  Very handy.
+
+Note that you can only do this when you're in the Group view, and you have to
+put your cursor on the group you want to search (typically, All Mail).
 
 * Implementation
 ** Package Installation
@@ -135,6 +159,7 @@ it's best to leave it here in case you do start using it for your contacts.
 
 #+begin_src emacs-lisp :tangle yes
 (require-package '(bbdb))
+(require 'nnir)
 #+end_src
 
 ** IMAP, SMTP, and User Info
@@ -149,7 +174,8 @@ and also server info if you don't use Google Inbox/Gmail.
       '(nnimap "gmail"
 	       (nnimap-address "imap.gmail.com")
 	       (nnimap-server-port 993)
-	       (nnimap-stream ssl)))
+	       (nnimap-stream ssl)
+               (nnir-search-engine imap)))
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
