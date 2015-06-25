@@ -1,23 +1,147 @@
+#+TITLE: Gnus for Google Inbox
+
 * Introduction
 
-This configuration file contains my Gnus configuration, for accessing mail at
-Gmail.  Since my Gmail account is set up to get mail from the rest of my email
-accounts, and send as them too, I only need to have this one account set up.
+Recently, I've been using Google Inbox.  Since I have previously setup my Google
+account to send and receive mail from my other email accounts, I can use it as
+my primary email service for all of my mail.  While Google Inbox isn't really
+"revolutionary", it re-evaluates which UI elements of an email client should be
+emphasized.  Instead of heavily emphasizing folders, categorization, flagging,
+etc., Inbox values the message list, and your basic activities are: read, act,
+and done.  You read the message easily.  Then you act on the message.  That may
+mean actually dealing with it, or it may mean snoozing it.  Once you've dealt
+with the message, you hit "Done" and it goes away from your inbox.  But, it's
+never gone for good, and you can always get back to old messages with a simple
+search.
+
+I appreciate this perspective on mail.  It turns my inbox into a something of a
+task list.  In Gmail, I had this preoccupation with my huge tree of labels.
+Everything had to be categorized properly before being removed from the inbox.
+It was terrible, because nobody likes categorizing each email that arrives,
+several times per day.  Naturally, my inbox would accrue hundreds of messages
+before I bit the bullet and cleared it out (spending easily an hour on the
+categorization, which is actually pretty quick thanks to Gmail's keyboard
+shortcuts).  The Inbox perspective removes the burden of categorization.  It's
+as simple as "is the task done?"  If so, it's out of the inbox.  And if I was
+wrong, I can always find it again with a search.  It's about time I let the
+computers take control of my organization!
+
+Long story short, I like Inbox.  However, not every computer is ready to spin up
+a modern browser and load a Javascript-laden email interface.  I use quite a few
+computers that have very modest capabilities, and Emacs outperforms web browsers
+on them.  So, I took it upon myself to get Emacs to the point where I could send
+and receive mail easily, in a manner that feels like it belongs in Emacs, while
+also being reasonably true to the Google Inbox approach.  This configuration
+does the trick for me.  It's based on Gnus, which is actually a newsgroup reader
+for Emacs, but has been adapted to work with email.  Due to the fact that Gnus
+was made for newsgroups, it feels awkward using it with email, and it has a ton
+of extra features.  My configuration is highly customized, and aims to make Gnus
+look and feel more like a simple mail client.
+
+* Instructions
+** Setup
+*** Mail
+
+If you were to take this configuration for yourself, you would need to do the
+following to get email send/receive working:
+1. (If you're not me) Change references to my name and email address to your
+   own.  You may need to modify IMAP/SMTP settings if you aren't using Gmail.
+2. Create a =~/.authinfo= file containing your passwords for IMAP and SMTP (just
+   your Gmail password, or an application-specific password if you do 2-factor
+   auth, which you should).  There is an example further down, in the [[authinfo]["Imap,
+   SMTP, and User INFO"]] section, which you can use to get started.  Make sure
+   you set this file to 600 permissions.
+3. Run =M-x gnus=.  If you have a lot of folders, it should take a long time
+   "subscribing" to each of them.  This is a first-run sort of thing, we'll fix
+   it in a bit.  Once it's finished, hit =q= to close it, and run =M-x gnus=
+   again.  This time, it will start pretty much instantly, and it will show a
+   list of folders.
+4. Using =C-k=, kill every folder you don't want to see ever.  I killed
+   everything except INBOX and [Gmail]/All Mail, because that's pretty much how
+   Google Inbox does it.
+5. On every folder you'd like Gnus to check at startup (fewer=better), put point
+   on that group, and run the command =S l 1=.  This changes the folder's
+   "level" to 1.  I set INBOX's level to 1.
+6. Everything that you'd like to be able to view, but not check on startup,
+   leave alone.  I left [Gmail]/All Mail alone.  If you're confused about the
+   last couple steps, and you want to understand what's going on in the
+   background, check out the [[folderselection][Folder Selection]] section.
+
+*** Contacts
+
+To get your contacts imported into Emacs so that you can get name completion in
+the "To:" field, do this:
+1. Go to Google contacts and export as a VCard File.  You probably only want to
+   export "My Contacts", not all of them, because you'll have a lot of strange,
+   spurious entries with all of them.
+2. Install =bbdb-vcard= (=M-x package-install RET bbdb-vcard RET=).
+3. Run =M-x bbdb-vcard-import-file RET [filename-here] RET=.
+4. Afterwards, you can view your contact list by running =M-x bbdb RET RET=.
+   + Use =n= and =p= to scroll through by each contact instead of each line.
+   + Hit =d= (and type =y= to confirm) on any spurious contacts you'd like to
+     delete.
+   + Hit =e= on any field to edit its contents.
+5. In my contacts, a few contacts had names that ended with "(imported-xxxx)".
+   I'm not sure why.  You'll want to =C-s= to ISearch through the buffer for
+   instances of the word "imported", then edit and remove those occurrences.  I
+   only had around 3 of them.
+
+*** Search
+
+TBD
+
+** Usage
+
+Gnus is primarily a news reader that happens to support email.  So, it has some
+weird idiosyncracies, which I've tried to eliminate in my configuration below.
+
+There are three views in Gnus.  The Group view, the Summary view, and the
+Article view.  When you load up Gnus, you see the Group view.  You can navigate
+that like normal, with =C-n= and =C-p=, or arrow keys.  You can refresh the
+unread counts by hitting =g=.  Hit enter on the group (this is basically a
+synonym for folder) you want to open.  You can also left click on a group name
+to open it.  This brings you to the Summary view, which shows your messages in
+that folder.  If you have a lot of messages in that folder, you may be prompted
+for how many to load.  More means longer loading time.
+
+In the Summary view, you can navigate with just the =n= and =p= buttons, which I
+find helpful.  You can hit enter to open up a message.  This will split your
+window so that you can see the message (in the Article view) and the Summary
+view at the same time.  It keeps your point in the Summary, which is usually
+nice.  You can delete a message using the delete key (type yes to confirm).  You
+can refresh the list by hitting =g=.  Reply to a message with =r=.  If you want
+to quote the original, use =R=.  Reply all (Wide reply) using =w=, and
+similarly, include a quote with =W=.  Exit the summary (and any opened articles)
+with =q=.
+
+The Article view is tied to the Summary view, which is why it's usually split
+from the Summary view.  You can do all the reply shortcuts in the Article view,
+and you can also scroll using normal keys.  I find that once I open an article
+view and read the message, I want to get rid of the window so I have a clean
+Summary mode.  If your point is currently in the Article, just use =C-x 0=.  If
+your point is in the Summary mode, use the shortcut =v x= to bury the current
+article window.  Also, if you hit =q= in the Article mode, it will exit out of
+both the article and the summary view.
+
+Anywhere within Gnus, you can hit =m= to start writing a message.  Anywhere
+else, you can use =C-x m= to compose a message as well.
 
 * Implementation
 ** Package Installation
 
-You do need gnus.  However, I'm pretty sure that it comes preinstalled on Emacs.
-Also, BBDB, which is not installed by default.
+Gnus is installed by default in Emacs.  BBDB, on the other hand, is not.  You
+should be fine using this configuration, even if you never actually use BBDB, so
+it's best to leave it here in case you do start using it for your contacts.
 
 #+begin_src emacs-lisp :tangle yes
 (require-package '(bbdb))
 #+end_src
 
-** Configuration
+** IMAP, SMTP, and User Info
 
-This is from the [[http://www.emacswiki.org/emacs/GnusGmail][Emacs Wiki]] article on Gnus.  These are the IMAP and SMTP
-settings necessary.
+I actually copied a lot of this from the [[http://www.emacswiki.org/emacs/GnusGmail][Emacs Wiki]] article on Gnus, and
+modified it for my own uses.  You'll need to modify email addresses and names,
+and also server info if you don't use Google Inbox/Gmail.
 
 #+name: init
 #+begin_src emacs-lisp
@@ -37,27 +161,34 @@ settings necessary.
       gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 #+end_src
 
-Also required is a .authinfo file with SMTP and IMAP server entries.  It
-prevents you from having to specify the password.  This file should definitely
-have 600 permissions.  The file should look something like this:
+You definitely don't want to store an email password in an Emacs config file
+(especially if you'll then put it on GitHub!).  So, you should use a
+=~/.authinfo= file with entries for the SMTP and IMAP servers.  This file should
+definitely have 600 permissions (meaning, nobody except you can read it.  You
+can set these permissions with the bash command =chmod 600 ~/.authinfo=).  The
+file should look something like this:
+
+<<authinfo>>
 
 #+BEGIN_EXAMPLE
 machine imap.gmail.com login [email] password [password] port 993
 machine smtp.gmail.com login [email] password [password] port 587
 #+END_EXAMPLE
 
-The following settings set my From address accordingly (although I may want to
-mail from different addresses).
+This sets information about who you are -- it goes into your From field for all
+your messages.  Definitely edit it, unless you're me.
 
 #+begin_src emacs-lisp :tangle yes
 (setq user-full-name "Stephen Brennan"
       user-mail-address "brenns10@gmail.com")
 #+end_src
 
-** Customization
+** Look and Feel
 
-This code is cut and pasted from [[https://eschulte.github.io/emacs24-starter-kit/starter-kit-gnus.html][Starter Kit Gnus]].  It makes the summary view
-look much more like an email list.
+Vanilla Gnus is meant to be a news reader.  So, message lists don't look
+anything like you're accustomed to in an email list.  The below code makes the
+message lists look more like an email list.  The code is cut and pasted from
+[[https://eschulte.github.io/emacs24-starter-kit/starter-kit-gnus.html][Starter Kit Gnus]].
 
 #+begin_src emacs-lisp :tangle yes
 ; http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a673a74356e7141f
@@ -83,8 +214,11 @@ look much more like an email list.
 (setq gnus-summary-display-arrow t)
 #+end_src
 
-This sets Gnus to display all messages in any group, and make the Inbox always
-visible.
+As a consequence of being a news reader, Gnus assumes that once you've read a
+message, you're pretty much done with it.  That's very bad for email, and a
+completely unexpected behavior for most people.  So, this will ensure that Gnus
+will always show messages, even if they're read.  It also makes sure that you
+always have access to the Inbox group, even when there are no unread messages.
 
 #+begin_src emacs-lisp :tangle yes
 (setq gnus-parameters
@@ -94,36 +228,63 @@ visible.
 (setq gnus-permanently-visible-groups "INBOX")
 #+end_src
 
-Gnus takes an obnoxiously long time to load, since it has to get a listing from
-every single folder before it loads.  I only want my Inbox -- none of the
-folders matter to me, so long as I can read, reply, and archive.  So, I set the
-inbox to level 1, and everything else to level 7, and then set Gnus to only read
-from level 1 at startup.
-
-#+begin_src emacs-lisp :tangle yes
-(setq gnus-activate-level 1)
-#+end_src
-
-This has Gnus display the newest emails first.
+This has Gnus display the newest emails first (again, this isn't normal behavior
+for Gnus due to being a news reader).
 
 #+begin_src emacs-lisp :tangle yes
 (setq gnus-thread-sort-functions
   '(gnus-thread-sort-by-most-recent-number))
 #+end_src
 
-These commands give me easier access to PGP encryption services.
+This little snippet enables [[https://www.gnu.org/software/emacs/manual/html_node/gnus/Group-Topics.html][topic mode]] for the Group view.  This essentially
+allows you to group folders into topics.  Of course, with Google Inbox, this
+really doesn't matter.  You can completely get rid of this snippet.  I happen to
+like having the topic heading, even though there's only one and I haven't
+customized it.  I guess everyone has their idiosyncracies.
+
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+#+end_src
+
+** Folder Selection
+
+<<folderselection>>
+
+By the design of Gnus, whenever it starts up, it needs to check every folder
+you're "subscribed" to, and get a list of messages in there.  Then, it checks it
+against your =~/.newsrc= file to see what you've read.  It's a really silly and
+really slow system that stems from the age of news readers.  The Gnus developers
+know it can be pretty slow, so they made a way for you to say which folders
+you'd like checked on startup, by setting their "level" (1-9).  It's actually
+reasonably complex, but allows for plenty of customization.  My customization is
+as follows:
+
+- I decided that I only want Gnus to query the server about my Inbox.  So, I set
+  my Inbox to level 1, (=S l 1= in the Group buffer, with point on INBOX), and
+  then set the correct variable accordingly:
+  #+begin_src emacs-lisp :tangle yes
+  (setq gnus-activate-level 1)
+  #+end_src
+- I would like to see some other folders in my Group view (like All Mail), but I
+  don't want Gnus to check them every time.  Thankfully, the threshold for a
+  folder showing up by default in the Group view is 5.  So, any value from 2 to
+  5 will be good.  I set "[Gmail]/All Mail" to be level 2.
+- I don't want to see any other folders.  Furthermore, I don't want Gnus to even
+  try to track them.  So, I "killed" them using =C-k= in the Group view.  This
+  gave them a level of 9.
+
+** Miscellaneous
+
+These commands give me easier access to PGP encryption services.  Basically, if
+you open a signed or encrypted message, this will automatically verify or
+decrypt it for you.  Also, when you decide to encrypt your messages, it will
+ask you to select recipient keys from a list, which is very nice.
 
 #+begin_src emacs-lisp :tangle yes
 (setq mm-verify-option 'always)
 (setq mm-decrypt-option 'always)
 (setq mm-encrypt-option 'guided)
 (setq gnus-buttonized-mime-types '("multipart/signed"))
-#+end_src
-
-Use the topic view in Group mode.
-
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 #+end_src
 
 This will automatically quit Gnus non-interactively when Emacs exits, so I don't
@@ -142,12 +303,17 @@ Don't let Gnus take the entire window **every time I open something**.
 (setq gnus-use-full-window nil)
 #+end_src
 
+** Key Bindings
+
 Some keys and mouse gestures that make mail navigation easier:
 - Use "n" and "p" for navigation, without control button.
 - Create a shortcut "v x" that will close the open article buffer.
 - Use middle click on article buffer to close it.  Since there is already
   functionality to middle click on message and view it (in Summary view), this
   makes mouse navigation nice using middle click.
+- Use the delete key to delete a message, instead of =B <delete>=, which was a
+  bit annoying.  This will still prompt for confirmation, but you can disable
+  that by setting =gnus-novice-user= to =nil=.
 
 #+begin_src emacs-lisp :tangle yes
 (defun stemacs-switch-close ()
@@ -170,11 +336,17 @@ Some keys and mouse gestures that make mail navigation easier:
     (progn
       (define-key gnus-summary-mode-map (kbd "v x") 'stemacs-switch-close)
       (define-key gnus-summary-mode-map (kbd "n") 'next-line)
-      (define-key gnus-summary-mode-map (kbd "p") 'previous-line))))
+      (define-key gnus-summary-mode-map (kbd "p") 'previous-line)
+      (define-key gnus-summary-mode-map (kbd "<delete>") 'gnus-summary-delete-article)
+      (define-key gnus-summary-mode-map (kbd "g") 'gnus-summary-insert-new-articles))))
 (add-hook 'gnus-article-mode-hook
   (lambda ()
-    (define-key gnus-article-mode-map [down-mouse-2] 'stemacs-mouse-close)))
+    (progn
+      (define-key gnus-article-mode-map [down-mouse-2] 'stemacs-mouse-close)
+      (define-key gnus-article-mode-map (kbd "<delete>") 'gnus-summary-delete-article))))
 #+end_src
+
+** BBDB Contacts
 
 For contacts, I'm using BBDB.  This seems to work for me.  I downloaded my
 Google Contacts in VCF, and used bbdb-vcard to import them.
