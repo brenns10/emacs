@@ -99,13 +99,13 @@ There are three views in Gnus.  The Group view, the Summary view, and the
 Article view.
 
 *** Group View
-When you load up Gnus, you see the Group view.  You can navigate that like
-normal, with =C-n= and =C-p=, or arrow keys.  You can refresh the unread counts
-by hitting =g=.  Hit enter on the group (this is basically a synonym for folder)
-you want to open.  You can also left click on a group name to open it.  This
-brings you to the Summary view, which shows your messages in that folder.  If
-you have a lot of messages in that folder, you may be prompted for how many to
-load.  More means longer loading time.
+When you load up Gnus, you see the Group view.  You can navigate without using
+the Control key, with =n= and =p=, or arrow keys.  You can refresh the unread
+counts by hitting =g=.  Hit enter on the group (this is basically a synonym for
+folder) you want to open.  You can also left click on a group name to open it.
+This brings you to the Summary view, which shows your messages in that folder.
+If you have a lot of messages in that folder, you may be prompted for how many
+to load.  More means longer loading time.
 
 *** Summary View
 In the Summary view, you can navigate with just the =n= and =p= buttons, which I
@@ -342,34 +342,39 @@ Some keys and mouse gestures that make mail navigation easier:
   that by setting =gnus-novice-user= to =nil=.
 
 #+begin_src emacs-lisp :tangle yes
-(defun stemacs-switch-close ()
-  "Switch window and close it."
-  (interactive)
-  (progn
-    (other-window 1)
-    (delete-window)))
-
-(defun stemacs-mouse-close (event)
-  "Switch to the clicked window and close it."
-  (interactive "e")
-  (let ((w (posn-window (event-start event))))
-    (if (window-valid-p w)
-      (delete-window (select-window w))
-      nil)))
-
-(add-hook 'gnus-summary-mode-hook
-  (lambda ()
+  (defun stemacs-switch-close ()
+    "Switch window and close it."
+    (interactive)
     (progn
-      (define-key gnus-summary-mode-map (kbd "v x") 'stemacs-switch-close)
-      (define-key gnus-summary-mode-map (kbd "n") 'next-line)
-      (define-key gnus-summary-mode-map (kbd "p") 'previous-line)
-      (define-key gnus-summary-mode-map (kbd "<delete>") 'gnus-summary-delete-article)
-      (define-key gnus-summary-mode-map (kbd "g") 'gnus-summary-insert-new-articles))))
-(add-hook 'gnus-article-mode-hook
-  (lambda ()
-    (progn
-      (define-key gnus-article-mode-map [down-mouse-2] 'stemacs-mouse-close)
-      (define-key gnus-article-mode-map (kbd "<delete>") 'gnus-summary-delete-article))))
+      (other-window 1)
+      (delete-window)))
+
+  (defun stemacs-mouse-close (event)
+    "Switch to the clicked window and close it."
+    (interactive "e")
+    (let ((w (posn-window (event-start event))))
+      (if (window-valid-p w)
+        (delete-window (select-window w))
+        nil)))
+
+  (add-hook 'gnus-group-mode-hook
+    (lambda ()
+      (progn
+        (define-key gnus-group-mode-map (kbd "n") 'gnus-group-next-group)
+        (define-key gnus-group-mode-map (kbd "p") 'gnus-group-prev-group))))
+  (add-hook 'gnus-summary-mode-hook
+    (lambda ()
+      (progn
+        (define-key gnus-summary-mode-map (kbd "v x") 'stemacs-switch-close)
+        (define-key gnus-summary-mode-map (kbd "n") 'next-line)
+        (define-key gnus-summary-mode-map (kbd "p") 'previous-line)
+        (define-key gnus-summary-mode-map (kbd "<delete>") 'gnus-summary-delete-article)
+        (define-key gnus-summary-mode-map (kbd "g") 'gnus-summary-insert-new-articles))))
+  (add-hook 'gnus-article-mode-hook
+    (lambda ()
+      (progn
+        (define-key gnus-article-mode-map [down-mouse-2] 'stemacs-mouse-close)
+        (define-key gnus-article-mode-map (kbd "<delete>") 'gnus-summary-delete-article))))
 #+end_src
 
 ** BBDB Contacts
