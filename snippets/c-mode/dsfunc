@@ -3,25 +3,25 @@
 #contributor: Stephen Brennan <stephen.brennan@case.edu>
 #expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
 # --
-void $1_init($1 *obj, $2)
+void $1_init($2 *obj, $3)
 {
   // Initialization logic
   $0
 }
 
-$1 *$1_create($2)
+$2 *$1_create($3)
 {
-  $1 *obj = smb_new($1, 1);
-  $1_init(obj, $3);
+  $2 *obj = smb_new($2, 1);
+  $1_init(obj, $4);
   return obj;
 }
 
-void $1_destroy($1 *obj)
+void $1_destroy($2 *obj)
 {
   // Cleanup logic
 }
 
-void $1_delete($1 *obj) {
+void $1_delete($2 *obj) {
   $1_destroy(obj);
   smb_free(obj);
 }

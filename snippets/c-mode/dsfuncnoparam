@@ -3,29 +3,25 @@
 #contributor: Stephen Brennan <stephen.brennan@case.edu>
 #expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
 # --
-void $1_init($1 *obj)
+void $1_init($2 *obj)
 {
   // Initialization logic
   $0
 }
 
-$1 *$1_create(void)
+$2 *$1_create(void)
 {
-  $1 *obj = smb_new($1, 1);
+  $2 *obj = smb_new($2, 1);
   $1_init(obj);
   return obj;
 }
 
-void $1_destroy($1 *obj)
+void $1_destroy($2 *obj)
 {
   // Cleanup logic
 }
 
-void $1_delete($1 *obj) {
-  if (obj) {
-    $1_destroy(obj);
-    smb_free(obj);
-  } else {
-    fprintf(stderr, "$1_delete: called with null pointer.\n");
-  }
+void $1_delete($2 *obj) {
+  $1_destroy(obj);
+  smb_free(obj);
 }
