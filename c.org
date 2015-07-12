@@ -55,13 +55,16 @@ Also, we set up EDE mode, and configure some projects.  Sadly, you can't put
 these configurations with the projects themselves.
 
 #+begin_src emacs-lisp :tangle yes
-(global-ede-mode)
-(ede-cpp-root-project "cky"
-                      :file "~/repos/cky/Makefile"
-                      :include-path '("/libstephen/inc" "/src"))
-(ede-cpp-root-project "libstephen"
-                      :file "~/repos/libstephen/Makefile"
-                      :include-path '("/inc"))
+  (global-ede-mode)
+  (ede-cpp-root-project "cky"
+                        :file "~/repos/cky/Makefile"
+                        :include-path '("/libstephen/inc" "/src"))
+  (ede-cpp-root-project "libstephen"
+                        :file "~/repos/libstephen/Makefile"
+                        :include-path '("/inc"))
+  (ede-cpp-root-project "python3-netfilter_queue"
+                        :file "~/repos/python3-netfilter_queue/Makefile"
+                        :include-path '("/libstephen/inc" "/"))
 #+end_src
 
 This keybinding pops open a buffer allowing you to jump to a tag definition in a
