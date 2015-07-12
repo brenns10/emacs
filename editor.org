@@ -7,7 +7,7 @@ This file contains all my basic editor preferences.
 
 #+name: requirements
 #+begin_src emacs-lisp
-(require-package '(solarized-theme dired+ tabbar fill-column-indicator diff-hl))
+(require-package '(solarized-theme dired+ fill-column-indicator diff-hl))
 (require 'whitespace)
 (require 'diff-hl)
 #+end_src
@@ -111,14 +111,6 @@ Highlighting the current line
 #+begin_src emacs-lisp
 ;; Always highlight the current line
 (global-hl-line-mode 1)
-#+end_src
-
-Tabbar
-
-#+name: init
-#+begin_src emacs-lisp
-;; Show a buffer tab bar!  Requires tabbar package.
-;;(tabbar-mode)
 #+end_src
 
 Remove unnecessary UI elements.
