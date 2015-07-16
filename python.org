@@ -22,3 +22,43 @@ line separate from the quotes, and no newline at the end.  That is the
 #+begin_src emacs-lisp :tangle yes
   (setq python-fill-docstring-style 'symmetric)
 #+end_src
+
+** Custom Functions
+
+Proper Python development needs good docstrings!  ReStructuredText and Sphinx
+are pretty much industry standard, so here are some functions that allow me to
+edit docstrings using =rst-mode=, which helps me catch errors in the rendering
+of the docstring, before they happen.
+
+#+begin_src emacs-lisp :tangle yes
+(defun narrow-to-docstring ()
+  "Narrow the buffer to just the Python docstring you're
+  currently working on.  Switch to rst-mode for easy editing.
+  Use widen-docstring to return to Python mode."
+  (interactive)
+  (let (p1 p2)
+    (progn
+      (search-backward "\"\"\"")
+      (forward-char 3)
+      (setq p1 (point))
+      (search-forward "\"\"\"")
+      (backward-char 4)
+      (setq p2 (point))
+      (narrow-to-region p1 p2)
+      (rst-mode))))
+
+(defun widen-docstring ()
+  "Widen out from narrowed Python docstring editing."
+  (interactive)
+  (progn
+    (widen)
+    (python-mode)))
+#+end_src
+
+I'll bind =narrow-to-docstring= to `C-c d` in =python-mode=, and
+=widen-docstring= to `C-c d` in =rst-mode=:
+
+#+begin_src emacs-lisp :tangle yes
+(define-key python-mode-map (kbd "C-c d") 'narrow-to-docstring)
+(define-key rst-mode-map (kbd "C-c d") 'widen-docstring)
+#+end_src
