@@ -31,7 +31,7 @@ This is my server.
   (let ((password (car (read-lines (expand-file-name "ircpass"
                                                      user-emacs-directory)))))
     (setq znc-servers
-          (list (list "penthousecult.noip.me" 6697 t
+          (list (list "home.brenns10.com" 6697 t
                        (list (list 'CWRU "stephen" password))))))
 #+end_src
 
