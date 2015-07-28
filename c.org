@@ -62,6 +62,9 @@ these configurations with the projects themselves.
   (ede-cpp-root-project "libstephen"
                         :file "~/repos/libstephen/Makefile"
                         :include-path '("/inc"))
+  (ede-cpp-root-project "cbot"
+                        :file "~/repos/cbot/Makefile"
+                        :include-path '("/inc" "/libstephen/inc" "/src"))
   (ede-cpp-root-project "python3-netfilter_queue"
                         :file "~/repos/python3-netfilter_queue/Makefile"
                         :include-path '("/libstephen/inc" "/"))
