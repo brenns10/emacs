@@ -137,3 +137,10 @@ Map C-x C-b to a nicer buffer list.
 #+begin_src emacs-lisp :tangle yes
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 #+end_src
+
+Use the Monofur font.
+
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'default-frame-alist
+               '(font . "monofur-12"))
+#+end_src
