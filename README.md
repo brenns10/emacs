@@ -50,3 +50,9 @@ modules, you need to do something besides running them on startup.  If there is
 any external configuration, there should be a section named "External
 Configuration" that describes what needs to be done.  It will probably even have
 commands to run, that should work on Arch Linux.
+
+Here are the important externals:
+
+- AucTex: `pacman -S auctex`
+- English Aspell Dictionary: `pacman -S aspell-en`
+- Poppler for PDF: `pacman S poppler-glib`
