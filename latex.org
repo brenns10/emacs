@@ -9,6 +9,7 @@ through emacs.
 
 #+begin_src emacs-lisp :tangle yes
 ;; (require-package '(auctex))
+(require-package '(apel))  ;; for set-alist
 #+end_src
 
 ** Settings
@@ -19,23 +20,16 @@ First, we need to load up auctex.
 (load "preview-latex.el" nil t t)
 #+end_src
 
-Also, I like using Okular as my PDF viewer.
+Use PDF View as my main LaTeX PDF viewer when writing in Emacs!
 
 #+begin_src emacs-lisp :tangle yes
-;(eval-after-load "tex"
-;  '(add-to-list 'TeX-view-program-selection '(output-pdf "Okular")))
-(set-alist 'TeX-command-list "View"
-           '("(lambda ()
-               (let ((f \"%o\"))
-                 (find-file-other-window f)
-                 (pdf-view-mode)))"
-             TeX-run-function nil t))
-
-(eval-after-load 'doc-view
-                 '(define-key doc-view-mode-map (kbd "g")
-                                                (lambda ()
-                                                  (interactive)
-                                                  (doc-view-revert-buffer t t))))
+(eval-after-load "tex"
+  '(set-alist 'TeX-command-list "View"
+             '("(lambda ()
+                 (let ((f \"%o\"))
+                   (find-file-other-window f)
+                   (pdf-view-mode)))"
+               TeX-run-function nil t)))
 #+end_src
 
 Listings should allow dollar signs within them.
