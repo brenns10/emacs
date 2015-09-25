@@ -30,4 +30,5 @@ it, and set up PDFView as the default PDF viewer.
 
 #+begin_src emacs-lisp :tangle yes
   (pdf-tools-install)
+  (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
 #+end_src
