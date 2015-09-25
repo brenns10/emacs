@@ -22,8 +22,15 @@ First, we need to load up auctex.
 Also, I like using Okular as my PDF viewer.
 
 #+begin_src emacs-lisp :tangle yes
-(eval-after-load "tex"
-  '(add-to-list 'TeX-view-program-selection '(output-pdf "Okular")))
+;(eval-after-load "tex"
+;  '(add-to-list 'TeX-view-program-selection '(output-pdf "Okular")))
+(set-alist 'TeX-command-list "View"
+           '("(lambda ()
+               (let ((f \"%o\"))
+                 (find-file-other-window f)
+                 (pdf-view-mode)))"
+             TeX-run-function nil t))
+
 (eval-after-load 'doc-view
                  '(define-key doc-view-mode-map (kbd "g")
                                                 (lambda ()
