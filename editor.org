@@ -14,6 +14,14 @@ This file contains all my basic editor preferences.
 
 ** Settings
 
+My cursor color should be grey.  For some reason when Emacs is started as a
+server, it doesn't realize this, and sets it to this really dark, hard to see
+color. [[http://stackoverflow.com/questions/8204316/cant-change-cursor-color-in-emacsclient][Found here.]]
+
+#+begin_src emacs-lisp :tangle yes
+(setq default-frame-alist '((cursor-color . "grey")))
+#+end_src
+
 Highlight differences from current VC status.
 
 #+begin_src emacs-lisp :tangle yes
