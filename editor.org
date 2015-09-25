@@ -7,9 +7,10 @@ This file contains all my basic editor preferences.
 
 #+name: requirements
 #+begin_src emacs-lisp
-(require-package '(solarized-theme dired+ fill-column-indicator diff-hl))
+(require-package '(solarized-theme dired+ fill-column-indicator diff-hl powerline))
 (require 'whitespace)
 (require 'diff-hl)
+(require 'powerline)
 #+end_src
 
 ** Settings
@@ -20,6 +21,12 @@ color. [[http://stackoverflow.com/questions/8204316/cant-change-cursor-color-in-
 
 #+begin_src emacs-lisp :tangle yes
 (setq default-frame-alist '((cursor-color . "grey")))
+#+end_src
+
+Use the default "Powerline" theme for modeline.
+
+#+begin_src emacs-lisp :tangle yes
+(powerline-default-theme)
 #+end_src
 
 Highlight differences from current VC status.
