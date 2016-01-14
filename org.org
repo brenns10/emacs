@@ -8,7 +8,7 @@
 
    Automatic word wrapping and spell checking.
 
-#+begin_src emacs-lip :tangle yes
+#+begin_src emacs-lisp :tangle yes
 (add-hook 'org-mode-hook 'auto-fill-mode)
 (add-hook 'org-mode-hook 'flyspell-mode)
 #+end_src
