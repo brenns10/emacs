@@ -16,4 +16,5 @@ Automatically wrap my Markdown.
 
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'markdown-mode-hook 'auto-fill-mode)
+(add-hook 'markdown-mode-hook 'flyspell-mode)
 #+end_src
