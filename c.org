@@ -56,18 +56,21 @@ these configurations with the projects themselves.
 
 #+begin_src emacs-lisp :tangle yes
   (global-ede-mode)
-  (ede-cpp-root-project "cky"
-                        :file "~/repos/cky/Makefile"
-                        :include-path '("/libstephen/inc" "/src"))
-  (ede-cpp-root-project "libstephen"
-                        :file "~/repos/libstephen/Makefile"
-                        :include-path '("/inc"))
-  (ede-cpp-root-project "cbot"
-                        :file "~/repos/cbot/Makefile"
-                        :include-path '("/inc" "/libstephen/inc" "/src"))
-  (ede-cpp-root-project "python3-netfilter_queue"
-                        :file "~/repos/python3-netfilter_queue/Makefile"
-                        :include-path '("/libstephen/inc" "/"))
+
+  (defun register-project (name file include)
+    (when (file-exists-p file)
+      (ede-cpp-root-project name
+                            :file file
+                            :include-path include)))
+
+  (register-project "cky" "~/repos/cky/Makefile" '("/libstephen/inc" "/src"))
+  (register-project "libstephen" "~/repos/libstephen/Makefile" '("/inc"))
+  (register-project "cbot" "~/repos/cbot/Makefile"
+                    '("/inc" "/libstephen/inc" "/src"))
+  (register-project "python3-netfilter_queue"
+                    "~/repos/python3-netfilter_queue/Makefile"
+                    '("/libstephen/inc" "/"))
+  (register-project "nosj" "~/repos/nosj/Makefile" '("/libstephen/inc" "/src"))
 #+end_src
 
 This keybinding pops open a buffer allowing you to jump to a tag definition in a
