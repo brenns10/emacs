@@ -1,0 +1,37 @@
+* Introduction
+
+Fun stuff that is cute to show off.
+
+* Packages
+
+One of the packages we're showing off is =selectric-mode=.
+
+#+begin_src emacs-lisp
+(require-package '(selectric-mode))
+#+end_src
+
+* Settings
+
+Load =selectric-mode=.
+
+#+begin_src emacs-lisp :tangle yes
+(require 'selectric-mode)
+#+end_src
+
+Load =quake-mode=.
+
+#+begin_src
+(add-to-list 'load-path (concatenate emacs-dir "quake-mode"))
+(load "quake-mode.el")
+#+end_src
+
+* Instructions
+
+This little "fun" module loads two packages.  One is selectric mode, which makes
+a typewriter sound after every keypress.  It's kinda annoying, but whatever.
+The other package is quake mode, which just plays kill announcements whenever
+you kill a large amount of text.  You can enable or disable either of those
+modes by issuing their mode names as a command.  You'll need to have the program
+=aplay=, which is in the Arch Linux package =alsa-utils=.  The quake-mode
+program is modified by me from the original, so it's included in this repository
+instead of installed from elpa.
