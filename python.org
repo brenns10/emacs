@@ -60,5 +60,6 @@ I'll bind =narrow-to-docstring= to `C-c d` in =python-mode=, and
 
 #+begin_src emacs-lisp :tangle yes
 (define-key python-mode-map (kbd "C-c d") 'narrow-to-docstring)
-(define-key rst-mode-map (kbd "C-c d") 'widen-docstring)
+(eval-after-load "rst"
+  '(define-key rst-mode-map (kbd "C-c d") 'widen-docstring))
 #+end_src
