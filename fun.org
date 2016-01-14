@@ -20,8 +20,8 @@ Load =selectric-mode=.
 
 Load =quake-mode=.
 
-#+begin_src
-(add-to-list 'load-path (concatenate emacs-dir "quake-mode"))
+#+begin_src emacs-lisp :tangle yes
+(add-to-list 'load-path (concat emacs-dir "quake-mode/"))
 (load "quake-mode.el")
 #+end_src
 
